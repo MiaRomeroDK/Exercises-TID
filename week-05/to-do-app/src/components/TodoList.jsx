@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NewTodoForm from "./NewTodoForm";
+import NewTodoForm from "./NewTodoForm/NewTodoForm";
 import TodoItem from "./TodoItem";
 import { useEffect } from "react";
 import { fetchTodos, createTodo, setTodoDone, deleteTodo } from "../services/todoService";
