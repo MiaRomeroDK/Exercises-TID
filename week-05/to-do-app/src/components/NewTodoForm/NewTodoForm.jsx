@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './NewTodoForm.css';
+import "./NewTodoForm.css";
 
 export default function NewTodoForm({ onAdd }) {
   const [newTask, setNewTask] = useState("");
@@ -12,7 +12,11 @@ export default function NewTodoForm({ onAdd }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input value={newTask} onChange={(e) => setNewTask(e.target.value)} />
+      <input 
+        value={newTask} 
+        onChange={(e) => setNewTask(e.target.value)} 
+        placeholder="New task"
+      />
       <button>Add new item to the list</button>
     </form>
   );

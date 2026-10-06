@@ -2,33 +2,44 @@ import { useState } from "react";
 import NewTodoForm from "./NewTodoForm/NewTodoForm";
 import TodoItem from "./TodoItem";
 import { useEffect } from "react";
-import { fetchTodos, createTodo, setTodoDone, deleteTodo } from "../services/todoService";
-
-function loadTodoList() {
-  const saved = localStorage.getItem("todoList");
-  return saved ? JSON.parse(saved) : []
-}
+import { fetchTodos, createTodo, setTodoDone, deleteTodo, fetchTodosForList } from "../services/todoService";
+import { createList, fetchLists } from "../services/listService";
+import NewListForm from "./NewListForm";
+import { Link } from "react-router-dom";
 
 // initialTodo never used now that we use local storage.
 export default function TodoList({ firstName, userID }) {
   const [todoList, setTodoList] = useState([]);
+  const [lists, setLists] = useState([]);
 
   // when [todoList] array changes, it is turned into a string and saved under the key "todoList"
   useEffect(() => {
     async function load() {
-      const todos = await fetchTodos();
-      const filteredTodos = todos.filter((task) => (task.owner === userID) )
-      setTodoList(filteredTodos);
+      const allLists = await fetchLists();
+      setLists(allLists);
+
+      const allTodos = [];
+      for(const list of allLists) {
+        const todos = await fetchTodosForList(list);
+        allTodos.push(...todos);
+      }
+
+     setTodoList(allTodos);
     }
+    
     load();
   }, [userID]); 
 
-async function handleAdd(task) {
-   try {const created = await createTodo(task);
-   setTodoList([...todoList, created]);}
-   catch (error) {
-    console.error("could not create todo", error);
-   }
+
+
+  async function handleAddList(name) {
+    try {
+      const created = await createList(name);
+      setLists([...lists, created]);
+    }
+    catch (error) {
+      console.error("could not create list", error);
+    }
   }
 
   async function handleToggle(id) {
@@ -46,14 +57,27 @@ async function handleAdd(task) {
     <>
       <h1>Stuff that {firstName} needs to get done:</h1>
 
-      {todoList.length === 0 ? (
-        <h2>Nothing to do, lay down on the couch!</h2>
+      <NewListForm onAdd={handleAddList} />
+      {lists.length === 0 ? (
+        <p>No todo-lists yet.</p>
+      ) : (
+
+      lists.map((list) =>{
+        const todosForThisList = todoList.filter((task) => task.list === list.id);
+
+        return (
+        <section key={list.id}>
+          <h2>
+            <Link to={`/lists/${list.id}`}>{list.get("name")}</Link>
+          </h2>
+                {todosForThisList.length === 0 ? (
+        <h2>Nothing on this list yet!</h2>
       ) : (
         <>
-          <h2>{todoList.length} things to do!</h2>
+          <h2>{todosForThisList.length} things to do!</h2>
 
           <ul>
-            {todoList.map((task) => (
+            {todosForThisList.map((task) => (
               <TodoItem
                 key={task.id}
                 task={task}
@@ -64,8 +88,11 @@ async function handleAdd(task) {
           </ul>
         </>
       )}
-
-      <NewTodoForm onAdd={handleAdd} />
+         
+      </section>
+       );
+      })
+      )}
     </>
   );
 }
