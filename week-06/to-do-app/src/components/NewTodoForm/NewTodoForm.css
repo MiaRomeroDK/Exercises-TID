@@ -1,0 +1,9 @@
+form {
+  border-radius: 10px;
+  background-color: rgb(146, 189, 197);
+  padding: 10px;
+}
+
+button {
+  margin-left: 10px;
+}
