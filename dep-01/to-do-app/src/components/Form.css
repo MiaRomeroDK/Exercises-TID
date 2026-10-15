@@ -1,0 +1,118 @@
+form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #f1e9de;
+}
+
+form input {
+  flex: 1 1 14rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d6c7b7;
+  border-radius: 10px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+form input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+form input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px #a54f3526;
+}
+
+button {
+  min-height: 46px;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fffdf9;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  border-color: #d6c7b7;
+  background: #e4d9cb;
+  color: #746557;
+  cursor: not-allowed;
+}
+
+form button + button,
+#root > button {
+  border-color: #cdb9a7;
+  background: transparent;
+  color: var(--accent);
+}
+
+form button + button:hover:not(:disabled),
+#root > button:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: #f1e5d9;
+}
+
+#root > button {
+  margin-top: 1.5rem;
+}
+
+li button {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  background: #f7eae3;
+  color: #99482f;
+  font-size: 0.8rem;
+}
+
+li button:hover:not(:disabled) {
+  background: #efd5c8;
+}
+
+form p {
+  flex-basis: 100%;
+  margin: 0.25rem 0 0;
+  color: #99482f;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  form {
+    padding: 1rem;
+  }
+
+  form input, form button {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  form input,
+  button {
+    transition: none;
+  }
+}
