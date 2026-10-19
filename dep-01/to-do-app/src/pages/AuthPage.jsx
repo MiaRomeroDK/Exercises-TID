@@ -15,10 +15,8 @@ export default function AuthPage({ onAuthenticated }) {
             user.set("password", password);
             await user.signUp();
 
-            await user.signUp();
-
-            const acl = new Parse.ACL(user);   // I may change my row
-            acl.setPublicReadAccess(true);     // others may find me
+            const acl = new Parse.ACL(user);   // Owner gets read + write
+            acl.setPublicReadAccess(true);     // others users can find this user
             user.setACL(acl);
             await user.save();
 

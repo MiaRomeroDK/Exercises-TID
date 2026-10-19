@@ -63,7 +63,12 @@ export async function shareList(list, friend) {
         .equalTo("list", list)
         .find();
 
-    todos.forEach((todo) => todo.setACL(acl));
+    todos.forEach((todo) => {
+        const todoACL = new Parse.ACL(todo.getACL().toJSON());
+        todoACL.setReadAccess(friend, true);
+        todoACL.setWriteAccess(friend, true);
+        todo.setACL(todoACL);
+    });
 
     await Parse.Object.saveAll([member, list, ...todos]);
 }

@@ -38,7 +38,16 @@ export async function createTodo(text, list) {
     item.set("text", text);
     item.set("done", false);
     item.set("list", list);
-    item.setACL(list.getACL());
+    
+    const permissions = list.getACL().toJSON();
+    const todoACL = new Parse.ACL(permissions);
+
+    Object.entries(permissions).forEach(([userID, access]) =>{
+        if (access.read) {
+            todoACL.setWriteAccess(userID, true);
+        }
+    });
+    item.setACL(todoACL);
 
     return toPlainObject(await item.save());
 }
